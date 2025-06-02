@@ -1,12 +1,17 @@
 import asyncio
-from pyatv import scan, pair
+from pyatv import scan, pair, connect
 from pyatv.const import Protocol
+from pyatv.storage.file_storage import FileStorage
 
 loop = asyncio.get_event_loop()
 
 async def atv_controller():
+    # storage
+    storage = FileStorage.default_storage(loop)
+    await storage.load()
+
     # scan for devices
-    atvs = await scan(loop)
+    atvs = await scan(loop, protocol=Protocol.AirPlay, storage=storage)
     for index, atv in enumerate(atvs):
         print(f"{index} Name: {atv.name}, Address: {atv.address}")
         for service in atv.services:
@@ -14,9 +19,9 @@ async def atv_controller():
         print("\n")
 
     # pair from device selection
-    apple_tv = int(input("Which apple tv do you want to pair (index): "))
+    atv_input = int(input("Which apple tv do you want to pair (index): "))
     
-    pairing = await pair(atvs[apple_tv], Protocol.AirPlay, loop)
+    pairing = await pair(atvs[atv_input], Protocol.AirPlay, loop, storage=storage)
     await pairing.begin()
 
     pin = int(input("Pin: "))
@@ -31,6 +36,11 @@ async def atv_controller():
         print("Did not pair with device")
 
     await pairing.close()
+
+    # connect to paired device
+    connect_atv = await connect(atvs[atv_input], loop, storage=storage)
+    print(connect_atv.device_info)
+    connect_atv.close() 
 
 async def main():
     await atv_controller()
