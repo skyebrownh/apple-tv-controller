@@ -1,17 +1,46 @@
 import asyncio
+
 from pyatv import scan, pair, connect
-from pyatv.const import Protocol
+from pyatv.const import Protocol, FeatureName
 from pyatv.storage.file_storage import FileStorage
 
-loop = asyncio.get_event_loop()
+from menu import main_menu, handle_action
+
+TARGET_NAME = "Apt Alternate ATV"
+LOOP = asyncio.get_event_loop()
 
 async def atv_controller():
-    # storage
-    storage = FileStorage.default_storage(loop)
+    # load storage
+    storage = FileStorage.default_storage(LOOP)
     await storage.load()
 
-    # scan for devices
-    atvs = await scan(loop, protocol=Protocol.AirPlay, storage=storage)
+    # scan and match by name
+    atvs = await scan(LOOP, protocol=Protocol.AirPlay, storage=storage)
+    selected = next((d for d in atvs if d.name == TARGET_NAME), None)
+
+    # if not found, scan and pair
+    if not selected:
+        print(f"Device '{TARGET_NAME}' not found.")
+        print("Finding other devices to pair...")
+        selected = await pair_another_device(atvs, storage)
+
+    # connect to paired device
+    device = await connect(selected, LOOP, storage=storage)
+
+    # perform actions
+    remote = device.remote_control
+    
+    while True:
+        action = main_menu()
+        if action == "exit":
+            break
+        await handle_action(action, remote, device)
+
+    # close connection
+    device.close()
+
+async def pair_another_device(atvs, storage):
+    # loop through devices
     for index, atv in enumerate(atvs):
         print(f"{index} Name: {atv.name}, Address: {atv.address}")
         for service in atv.services:
@@ -21,7 +50,7 @@ async def atv_controller():
     # pair from device selection
     atv_input = int(input("Which apple tv do you want to pair (index): "))
     
-    pairing = await pair(atvs[atv_input], Protocol.AirPlay, loop, storage=storage)
+    pairing = await pair(atvs[atv_input], Protocol.AirPlay, LOOP, storage=storage)
     await pairing.begin()
 
     pin = int(input("Pin: "))
@@ -36,14 +65,10 @@ async def atv_controller():
         print("Did not pair with device")
 
     await pairing.close()
-
-    # connect to paired device
-    connect_atv = await connect(atvs[atv_input], loop, storage=storage)
-    print(connect_atv.device_info)
-    connect_atv.close() 
+    return atvs[atv_input]
 
 async def main():
     await atv_controller()
 
 if __name__ == '__main__':
-    loop.run_until_complete(main())
+    LOOP.run_until_complete(main())
