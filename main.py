@@ -2,17 +2,15 @@ import asyncio
 
 from pyatv import scan, pair, connect
 from pyatv.const import Protocol
-from pyatv.storage.file_storage import FileStorage
 
-from menu import main_menu, handle_action
+from core.storage import load_storage
+from core.menu import main_menu, handle_action
 
 TARGET_NAME = "Apt Alternate ATV"
 LOOP = asyncio.get_event_loop()
 
-async def atv_controller():
-    # load storage
-    storage = FileStorage.default_storage(LOOP)
-    await storage.load()
+async def main():
+    storage = await load_storage(LOOP)
 
     # scan and match by name
     atvs = await scan(LOOP, protocol=Protocol.AirPlay, storage=storage)
@@ -66,9 +64,6 @@ async def pair_another_device(atvs, storage):
 
     await pairing.close()
     return atvs[atv_input]
-
-async def main():
-    await atv_controller()
 
 if __name__ == '__main__':
     LOOP.run_until_complete(main())
