@@ -1,7 +1,7 @@
 import asyncio
 
 from pyatv import scan, pair, connect
-from pyatv.const import Protocol, FeatureName
+from pyatv.const import Protocol
 from pyatv.storage.file_storage import FileStorage
 
 from menu import main_menu, handle_action
