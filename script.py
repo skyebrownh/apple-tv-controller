@@ -18,8 +18,8 @@ async def main():
     controller = AppleTVMenuController([device1, device2])
     await controller.run()
 
-    await device1.disconnect()
-    await device2.disconnect()
+    device1.disconnect()
+    device2.disconnect()
 
 if __name__ == '__main__':
     asyncio.run(main())
