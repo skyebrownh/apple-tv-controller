@@ -9,13 +9,17 @@ async def main():
 
     storage = await load_storage(loop)
 
-    device = AppleTVDevice('Apt Alternate ATV', storage)
-    await device.connect(loop)
+    device1 = AppleTVDevice('Apt Apple TV', storage)
+    await device1.connect(loop)
 
-    controller = AppleTVMenuController(device)
+    device2 = AppleTVDevice('Apt Alternate ATV', storage)
+    await device2.connect(loop)
+
+    controller = AppleTVMenuController([device1, device2])
     await controller.run()
 
-    await device.disconnect()
+    await device1.disconnect()
+    await device2.disconnect()
 
 if __name__ == '__main__':
     asyncio.run(main())

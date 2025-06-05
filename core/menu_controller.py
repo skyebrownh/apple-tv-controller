@@ -2,12 +2,12 @@ from const import MenuAction
 from core.menu import get_menu_selection
 
 class AppleTVMenuController:
-    def __init__(self, device):
-        self.device = device
+    def __init__(self, devices):
+        self.devices = devices
 
     async def run(self):
         while True:
-            action = get_menu_selection()
+            device_num, action = get_menu_selection(len(self.devices))
             if action == MenuAction.EXIT:
                 break
-            await self.device.perform_action(action)
+            await self.devices[device_num - 1].perform_action(action)
