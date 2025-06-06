@@ -1,7 +1,8 @@
 import asyncio
 import logging
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.templating import Jinja2Templates
 
 from utils.storage import load_storage
 from models.apple_tv_device import AppleTVDevice
@@ -15,14 +16,15 @@ connected_devices: dict[str, AppleTVDevice] = {}
 
 # initialize FastAPI
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 register_exception_handlers(app)
 
 # root endpoint that returns our UI interface
 @app.get("/")
-def index():
+def index(request: Request):
     logging.info("Root (/) route called")
-    return "webpage"
+    return templates.TemplateResponse("index.html", { "request": request })
 
 # attempts to connect to an Apple TV
 @app.post("/connect")
