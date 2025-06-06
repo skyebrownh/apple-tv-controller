@@ -3,7 +3,7 @@ import asyncio
 from pyatv import scan, pair, connect
 from pyatv.const import Protocol
 
-from cli.const import MenuAction
+from models.enum import Action
 
 class AppleTVDevice:
     def __init__(self, name, storage):
@@ -60,23 +60,23 @@ class AppleTVDevice:
     
     async def perform_action(self, action):
         match action:
-            case MenuAction.UP:
+            case Action.UP:
                 await self.remote.up() 
-            case MenuAction.DOWN:
+            case Action.DOWN:
                 await self.remote.down()
-            case MenuAction.LEFT:
+            case Action.LEFT:
                 await self.remote.left()
-            case MenuAction.RIGHT:
+            case Action.RIGHT:
                 await self.remote.right()
-            case MenuAction.SELECT:
+            case Action.SELECT:
                 await self.remote.select()
-            case MenuAction.HOME:
+            case Action.HOME:
                 await self.remote.home()
-            case MenuAction.PREVIOUS:
+            case Action.PREVIOUS:
                 await self.remote.menu()
-            case MenuAction.PLAY_PAUSE:
+            case Action.PLAY_PAUSE:
                 await self.remote.play_pause()
-            case MenuAction.SLEEP:
+            case Action.SLEEP:
                 await self.device.power.turn_off()    
             case _:
                 pass

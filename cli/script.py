@@ -1,7 +1,7 @@
 import asyncio
 
-from storage import load_storage
-from apple_tv_device import AppleTVDevice
+from utils.storage import load_storage
+from models.apple_tv_device import AppleTVDevice
 from cli.menu_controller import AppleTVMenuController
 
 async def main():

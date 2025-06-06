@@ -1,32 +1,10 @@
 import asyncio
 
 from fastapi import FastAPI, HTTPException, status
-from pydantic import BaseModel
-from enum import Enum
 
-from storage import load_storage
-from apple_tv_device import AppleTVDevice
-
-# class as Enum for available actions to perform
-class Action(str, Enum):
-    UP = 'up'
-    DOWN = 'down'
-    LEFT = 'left'
-    RIGHT = 'right'
-    SELECT = 'select'
-    HOME = 'home'
-    PREVIOUS = 'previous'
-    PLAY_PAUSE = 'play/pause'
-    SLEEP = 'sleep'
-    EXIT = 'exit'
-
-# classes for Apple TV related endpoints request body
-class ConnectionRequest(BaseModel):
-    device_name: str
-
-class ActionRequest(BaseModel):
-    device_name: str
-    action: Action
+from utils.storage import load_storage
+from models.apple_tv_device import AppleTVDevice
+from models.request import ConnectionRequest, ActionRequest
 
 # dictionary to hold connected devices for use in multiple routes
 connected_devices: dict[str, AppleTVDevice] = {}
