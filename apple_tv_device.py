@@ -1,7 +1,9 @@
+import asyncio
+
 from pyatv import scan, pair, connect
 from pyatv.const import Protocol
 
-from const import MenuAction
+from cli.const import MenuAction
 
 class AppleTVDevice:
     def __init__(self, name, storage):
@@ -18,10 +20,6 @@ class AppleTVDevice:
         #     print(f'Device "{self.name}" not found.')
         #     print(f'Finding other devices to pair...')
         #     selected = await pair_another_device(atvs, self.storage)
-
-        if not selected:
-            print(f"ATV DEVICE CONNECT ERROR: device {self.name} not found!")
-            return
 
         self.device = await connect(selected, loop, self.storage)
         self.remote = self.device.remote_control
@@ -56,9 +54,9 @@ class AppleTVDevice:
         #     await pairing.close()
         #     return atvs[atv_input]
         
-    def disconnect(self):
+    async def disconnect(self):
         if self.device:
-            self.device.close()
+          await asyncio.gather(*self.device.close())
     
     async def perform_action(self, action):
         match action:

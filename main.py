@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
 from enum import Enum
 
-from core.storage import load_storage
-from core.apple_tv_device import AppleTVDevice
+from storage import load_storage
+from apple_tv_device import AppleTVDevice
 
 # class as Enum for available actions to perform
 class Action(str, Enum):
@@ -29,7 +29,7 @@ class ActionRequest(BaseModel):
     action: Action
 
 # dictionary to hold connected devices for use in multiple routes
-connected_devices = {}
+connected_devices: dict[str, AppleTVDevice] = {}
 
 # initialize FastAPI
 app = FastAPI()
@@ -54,4 +54,26 @@ async def connect(request: ConnectionRequest):
     if not atv.device:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{request.device_name} not found.")
 
+    # print(connected_devices)
+
     return {"status": f"{request.device_name} connected"}
+
+# attempts to perform an action on a connected Apple TV
+@app.post("/perform")
+async def perform_action(request: ActionRequest):
+    # print(connected_devices)
+
+    atv = connected_devices[request.device_name]
+
+    await atv.perform_action(request.action)
+
+    return {"status": f"{request.action} action performed on {request.device_name}"}
+
+# disconnect a connected Apple TV
+@app.post("/disconnect")
+async def disconnect(request: ConnectionRequest):
+    atv = connected_devices[request.device_name]
+    await atv.disconnect()
+    connected_devices.pop(request.device_name)
+
+    return {"status": f"{request.device_name} successfully disconnected"}

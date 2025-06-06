@@ -1,8 +1,8 @@
 import asyncio
 
-from core.storage import load_storage
-from core.apple_tv_device import AppleTVDevice
-from core.menu_controller import AppleTVMenuController
+from storage import load_storage
+from apple_tv_device import AppleTVDevice
+from cli.menu_controller import AppleTVMenuController
 
 async def main():
     loop = asyncio.get_running_loop()
@@ -18,8 +18,8 @@ async def main():
     controller = AppleTVMenuController([device1, device2])
     await controller.run()
 
-    device1.disconnect()
-    device2.disconnect()
+    await device1.disconnect()
+    await device2.disconnect()
 
 if __name__ == '__main__':
     asyncio.run(main())

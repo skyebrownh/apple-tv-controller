@@ -1,5 +1,5 @@
-from const import MenuAction
-from core.menu import get_menu_selection
+from cli.const import MenuAction
+from cli.menu import get_menu_selection
 
 class AppleTVMenuController:
     def __init__(self, devices):
