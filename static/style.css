@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
-.circle-btn {
-    @apply text-white bg-slate-800 w-11 h-11 rounded-full flex justify-center items-center;
+@layer components {
+    .circle-btn {
+        @apply text-white bg-slate-800 w-11 h-11 rounded-full flex justify-center items-center;
+    }
 }
