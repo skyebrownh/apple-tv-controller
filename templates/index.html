@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apple TV Controller</title>
-    <link rel="stylesheet" href="../static/output.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='output.css') }}">
 </head>
 <body class="w-screen h-screen flex justify-center items-stretch bg-blue-50 p-2">
     <main class="bg-white rounded-sm flex-1 p-2 flex flex-col">
@@ -13,10 +13,11 @@
         </div>
         <!-- remote device container -->
         <div class="flex-1 flex justify-evenly items-center">
+            {% for device in devices %}
             <!-- individual remote -->
              <div class="bg-slate-200 w-48 h-19/20 max-h-[448px] rounded-lg grid grid-cols-3 grid-rows-7 gap-1 p-1">
                 <!-- atv title -->
-                <div class="border-2 border-slate-800 col-span-2 rounded-lg flex justify-center items-center text-slate-800 font-medium uppercase">Test</div>
+                <div class="border-2 border-slate-800 col-span-2 rounded-lg flex justify-center items-center text-slate-800 font-medium uppercase">{{device.short_name}}</div>
                 <!-- power button -->
                 <button class="col-start-3 place-self-center group">
                     <div class="circle-btn group-active:bg-slate-500">
@@ -107,6 +108,7 @@
                     </div>
                 </button>
              </div>
+            {% endfor %}
         </div>
     </main>
 </body>

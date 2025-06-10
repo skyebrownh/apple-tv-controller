@@ -3,6 +3,8 @@ import logging
 
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from utils.storage import load_storage
 from models.apple_tv_device import AppleTVDevice
@@ -16,15 +18,21 @@ connected_devices: dict[str, AppleTVDevice] = {}
 
 # initialize FastAPI
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 register_exception_handlers(app)
 
 # root endpoint that returns our UI interface
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     logging.info("Root (/) route called")
-    return templates.TemplateResponse("index.html", { "request": request })
+    return templates.TemplateResponse(request=request, name="index.html", context={ 
+        "devices": [
+            { "name": "Apt Apple TV", "short_name": "MAIN" },
+            { "name": "Apt Alternate ATV", "short_name": "ALT" },
+        ]
+     })
 
 # attempts to connect to an Apple TV
 @app.post("/connect")
