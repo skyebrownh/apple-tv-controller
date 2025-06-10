@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apple TV Controller</title>
     <link rel="stylesheet" href="{{ url_for('static', path='output.css') }}">
+    <script src="{{ url_for('static', path='index.js') }}" defer></script>
 </head>
 <body class="w-screen h-screen flex justify-center items-stretch bg-blue-50 p-2">
     <main class="bg-white rounded-sm flex-1 p-2 flex flex-col">
@@ -15,9 +16,23 @@
         <div class="flex-1 flex justify-evenly items-center">
             {% for device in devices %}
             <!-- individual remote -->
-             <div class="bg-slate-200 w-48 h-19/20 max-h-[448px] rounded-lg grid grid-cols-3 grid-rows-7 gap-1 p-1">
+             <div data-device-name="{{device.name}}" class="device-remote bg-slate-200 w-48 h-19/20 max-h-[448px] rounded-lg grid grid-cols-3 grid-rows-7 gap-1 p-1">
                 <!-- atv title -->
-                <div class="border-2 border-slate-800 col-span-2 rounded-lg flex justify-center items-center text-slate-800 font-medium uppercase">{{device.short_name}}</div>
+                <div class="border-2 border-slate-800 col-span-2 rounded-lg flex justify-evenly items-center text-slate-800 font-medium uppercase">
+                    <p>{{device.short_name}}</p>
+                    <button class="connect-btn bg-emerald-300 text-white rounded-md p-1 flex justify-evenly items-center active:bg-emerald-600">
+                        <div class="spinner hidden w-3 h-3 border-2 border-white/50 border-t-transparent rounded-full animate-spin"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                        </svg>
+                    </button>
+                    <button class="disconnect-btn bg-red-400 text-white rounded-md p-1 flex justify-evenly items-center active:bg-red-600 hidden">
+                        <div class="spinner hidden w-3 h-3 border-2 border-white/50 border-t-transparent rounded-full animate-spin"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.181 8.68a4.503 4.503 0 0 1 1.903 6.405m-9.768-2.782L3.56 14.06a4.5 4.5 0 0 0 6.364 6.365l3.129-3.129m5.614-5.615 1.757-1.757a4.5 4.5 0 0 0-6.364-6.365l-4.5 4.5c-.258.26-.479.541-.661.84m1.903 6.405a4.495 4.495 0 0 1-1.242-.88 4.483 4.483 0 0 1-1.062-1.683m6.587 2.345 5.907 5.907m-5.907-5.907L8.898 8.898M2.991 2.99 8.898 8.9" />
+                        </svg>
+                    </button>
+                </div>
                 <!-- power button -->
                 <button class="col-start-3 place-self-center group">
                     <div class="circle-btn group-active:bg-slate-500">
