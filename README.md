@@ -1,32 +1,39 @@
 # Apple TV Controller
 
-A Python-based application for controlling multiple Apple TVs from a single interface. Built to eliminate the need for multiple remotes, this tool is designed to run on a touchscreen device like a Raspberry Pi.
+A custom-built controller app that lets you control multiple Apple TVs from a single touchscreen interface. Designed for deployment on a Raspberry Pi with a 7" display, this app removes the need for juggling multiple remotes in shared spaces like living rooms or media centers.
 
-## Features
+---
 
-- Scan for Apple TVs on the local network
-- Pair with Apple TVs and store credentials securely
-- Auto-connect to known devices using saved credentials
-- Navigate Apple TV interface with directional controls
-- Access common actions like Home, Menu, and Select
-- Sleep the device or return to the top menu
-- Command-line menu interface using arrow key navigation
+## 🖥️ Features
 
-> Note: Volume control and wake-on-command support may vary depending on Apple TV setup and HDMI-CEC compatibility.
+- Control multiple Apple TVs from a single interface
+- Button-based UI optimized for 800×480 screen resolution
+- Supports core remote functionality:
+  - Navigation (up, down, left, right)
+  - Select, Home, Previous, Play/Pause
+  - Sleep mode (power off)
+- Manual Connect / Disconnect per device
+- Visual interface closely mimics a physical Apple TV remote
+- Works over Wi-Fi using [pyatv](https://github.com/postlund/pyatv)
 
-## Tech Stack
+---
 
-- **Python 3.10+**
-- [`pyatv`](https://github.com/postlund/pyatv) – for Apple TV communication
-- `asyncio` – for asynchronous device control
-- `inquirer` – for interactive terminal menus
+## 🛠️ Tech Stack
 
-## Requirements
+- **Backend:** FastAPI (Python 3.13)
+- **Frontend:** HTML + TailwindCSS + Vanilla JavaScript
+- **Apple TV Control:** pyatv
+- **Target Hardware:** Raspberry Pi (with 7" touchscreen)
+
+---
+
+## 🚀 Getting Started (Local)
+### Requirements
 
 - Apple TVs must be on the same local network
 - Initial pairing requires accepting a PIN on the Apple TV screen
 
-## Setup
+### Setup
 
 1. Clone the repository:
 
@@ -51,12 +58,24 @@ A Python-based application for controlling multiple Apple TVs from a single inte
 4. Run the app
 
     ```bash
-    python main.py
+    fastapi main.py
     ```
 
-## Roadmap
+5. Open in browser
 
-- Raspberry Pi touchscreen deployment
-- Custom UI layer for touch input
-- Enhanced error handling and status feedback
-- Optional config file support
+    - Visit http://localhost:8000
+
+6. Connect to a device
+
+    - Click the "connect" (link icon) for the Apple TV you want to control
+    - Multiple devices can be connected simultaneously
+    - Use the interface to interact with your Apple TVs
+
+### Development Notes
+- You must pair your Apple TVs using pyatv before using the interface
+- Device credentials are saved locally using pyatv's default `~/.pyatv.conf`
+- Each session currently requires manual connection; auto-connect coming soon
+
+## 📦 Deployment Plan
+
+The app is designed for installation on a Raspberry Pi running a lightweight Linux OS. The backend runs locally and serves the UI through a browser on the Pi’s 7" touchscreen. FastAPI handles all interactions with the Apple TV devices.
