@@ -9,7 +9,27 @@ document.querySelectorAll('.connect-btn').forEach((button) => {
 
         const spinner = button.querySelector('.spinner')
         spinner.classList.remove('hidden')
-        await sleep(1000)
+
+        try {
+            const payload = { device_name: deviceName }
+            const response = await fetch('/connect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`)
+            }
+            
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            console.log('Request failed:', error)
+        }
+
         spinner.classList.add('hidden')
 
         button.classList.add('hidden')
@@ -27,7 +47,27 @@ document.querySelectorAll('.disconnect-btn').forEach((button) => {
 
         const spinner = button.querySelector('.spinner')
         spinner.classList.remove('hidden')
-        await sleep(1000)
+        
+        try {
+            const payload = { device_name: deviceName }
+            const response = await fetch('/disconnect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`)
+            }
+            
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            console.log('Request failed:', error)
+        }
+
         spinner.classList.add('hidden')
 
         button.classList.add('hidden')
@@ -35,9 +75,3 @@ document.querySelectorAll('.disconnect-btn').forEach((button) => {
         connectButton.classList.remove('hidden')
     })
 })
-
-
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
