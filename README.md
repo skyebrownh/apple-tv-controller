@@ -2,8 +2,6 @@
 
 A custom-built controller app that lets you control multiple Apple TVs from a single touchscreen interface. Designed for deployment on a Raspberry Pi with a 7" display, this app removes the need for juggling multiple remotes in shared spaces like living rooms or media centers.
 
----
-
 ## 🖥️ Features
 
 - Control multiple Apple TVs from a single interface
@@ -16,16 +14,12 @@ A custom-built controller app that lets you control multiple Apple TVs from a si
 - Visual interface closely mimics a physical Apple TV remote
 - Works over Wi-Fi using [pyatv](https://github.com/postlund/pyatv)
 
----
-
 ## 🛠️ Tech Stack
 
 - **Backend:** FastAPI (Python 3.13)
 - **Frontend:** HTML + TailwindCSS + Vanilla JavaScript
 - **Apple TV Control:** pyatv
 - **Target Hardware:** Raspberry Pi (with 7" touchscreen)
-
----
 
 ## 🚀 Getting Started (Local)
 ### Requirements
