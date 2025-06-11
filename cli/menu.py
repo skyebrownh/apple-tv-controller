@@ -1,6 +1,6 @@
 import inquirer
 
-from const import MenuAction
+from cli.const import MenuAction
 
 def get_menu_selection(num_devices: int):
     choices = MenuAction().get_actions()
